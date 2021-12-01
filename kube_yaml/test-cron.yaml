@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: test
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: test
+            image: test:1.0
+            env:
+            # Define the environment variable
+            - name: hello-svc-url # Notice that the case is different here
+                                        # from the key name in the ConfigMap.
+              valueFrom:
+                configMapKeyRef:
+                  name: services-config           # The ConfigMap this value comes from.
+                  key: hello-svc-url
+            imagePullPolicy: IfNotPresent
+          restartPolicy: Never

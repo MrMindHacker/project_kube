@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-dsv@3"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="para" class="container mt-5">
+        <div class="mb-2">
+            <input type="file" id="fileinput" />
+        <button id="upload" type="submit">Upload</button>
+        </div>
+        
+    </div>
+    <script>
+        // console.log(d3.csvParse("foo,bar\n1,2"));
+        function urlToAnchor(a, name, type){
+            return '<a target="_blank" href="' + a +'">' + name + ' ' + type +' </a>'           
+        }
+
+        function dataToMessage(d){
+            text = "hello," + d.name +"\n mail: " + d.mail + "\n phone: " +d.phone + "\n pay money: " + d.money
+            wa = "https://wa.me/" + "+91" + d.phone + "?text=" + encodeURIComponent(text)
+            ma = "mailto:" + d.mail + '?body=' + encodeURIComponent(text)
+            urls =urlToAnchor(wa, d.name, "Whatsapp") + '<br>' + urlToAnchor(ma, d.name, "Mail")
+            return'<div class="card w-75 mt-2 mb-2">  <div class="card-body"> <h5 class="card-title">' + name + '</h5>'+ urls + '</div> </div>'
+        }
+
+        $(document).ready(function(){
+          $("#upload").click(function(){
+
+            var reader = new FileReader();
+            reader.onload = function(){
+            var text = reader.result;
+            data = d3.csvParse(text)
+
+            data.forEach(element => {
+                $("#para").append('<br>' + dataToMessage(element));
+            });
+            
+
+            console.log(dataToMessage(data[0]), data[0]);
+            };
+            reader.readAsText($('#fileinput').get(0).files[0]);
+            // const data = d3.csvParse(myFile);
+          });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
